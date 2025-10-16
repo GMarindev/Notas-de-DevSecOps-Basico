@@ -24,21 +24,21 @@ Docker Swarm remains supported for small-scale clusters, but newer projects may 
 The OWASP Dependency-Check CLI occasionally updates or deprecates flags; always verify via:
 https://jeremylong.github.io/DependencyCheck/dependency-check-cli/arguments.html
 
-DOCKER Commands
+#  DOCKER Commands
 
-  #  Basics
+   - Basics
   docker --version
   docker info
   docker system df
   docker system prune -af
   
-  #  Image management
+   - Image management
   docker image ls
   docker image build -t <image_name>:<tag> .
   docker image push <repo>/<image>:<tag>
   docker rmi <image_name>
   
-  #  Container lifecycle
+   - Container lifecycle
   docker container run -d --name <name> -p 8000:8080 <image>
   docker container run -it --name <name> <image>
   docker container ls -a
@@ -48,147 +48,147 @@ DOCKER Commands
   docker container rm -f <name>
   docker logs -f <name>
   
-  #  Volumes
+   - Volumes
   docker volume create mydata
   docker volume ls
   docker run -d -v mydata:/data redis
   
-  #  Useful extras
+   - Useful extras
   docker exec -it <container_name> /bin/bash
   docker cp <container>:/path/in/container /path/on/host
   export DOCKER_HOST=ssh://user@remote-server
   docker ps
   
 
-DOCKER COMPOSE Commands
+#  DOCKER COMPOSE Commands
 
-  # Start multi-container app
+   - Start multi-container app
   docker compose up -d
   
-  # Stop all services
+   - Stop all services
   docker compose down
   
-  # Rebuild and restart
+   - Rebuild and restart
   docker compose up -d --build
   
-  # Logs and status
+   - Logs and status
   docker compose logs -f
   docker compose ps
   
-  # Run commands inside service
+   - Run commands inside service
   docker compose exec <service_name> /bin/bash
   
-  # Restart service
+   - Restart service
   docker compose restart <service_name>
   
-DOCKER SWARM — Functional Cluster Commands
+#  DOCKER SWARM — Functional Cluster Commands
 
-  # Initialize swarm on manager node
+   - Initialize swarm on manager node
   docker swarm init
   
-  # Join worker node (use token from manager)
+   - Join worker node (use token from manager)
   docker swarm join --token <token> <manager_ip>:2377
   
-  # Show cluster state
+   - Show cluster state
   docker node ls
   
-  # Create and scale services
+   - Create and scale services
   docker service create --name web --replicas 3 nginx
   docker service scale web=5
   docker service ls
   docker service ps web
   
-  # Deploy a stack (Compose file)
+   - Deploy a stack (Compose file)
   docker stack deploy -c docker-compose.yml mystack
   docker stack ps mystack
   docker stack rm mystack
   
-  # Leave swarm (for workers)
+   - Leave swarm (for workers)
   docker swarm leave --force
   
 
-JENKINS Commands (CLI + Docker)
+#  JENKINS Commands (CLI + Docker)
 
-  #  Run Jenkins with Docker
+   - Run Jenkins with Docker
   docker run -d --name jenkins -p 8080:8080 -p 50000:50000 jenkins/jenkins:lts
   
-  #  Retrieve initial admin password
+   - Retrieve initial admin password
   docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
   
-  #  Logs and management
+   - Logs and management
   docker logs -f jenkins
   docker stop jenkins
   docker start jenkins
   docker restart jenkins
   
-  #  Backup & restore Jenkins data
+   - Backup & restore Jenkins data
   docker cp jenkins:/var/jenkins_home ./jenkins_backup
   docker cp ./jenkins_backup jenkins:/var/jenkins_home
   
-  #  CLI Operations
+   - CLI Operations
   java -jar jenkins-cli.jar -s http://localhost:8080/ list-plugins
   java -jar jenkins-cli.jar -s http://localhost:8080/ install-plugin <plugin_name>
   java -jar jenkins-cli.jar -s http://localhost:8080/ safe-restart
   java -jar jenkins-cli.jar -s http://localhost:8080/ restart
   
 
-SONARQUBE Commands
+#  SONARQUBE Commands
 
-  #  Start & Stop SonarQube server
+   - Start & Stop SonarQube server
   ./bin/linux-x86-64/sonar.sh start
   ./bin/linux-x86-64/sonar.sh stop
   
-  #  Logs
+   - Logs
   cat $SONARQUBE_HOME/logs/sonar.log
   
-  #  Sonar Scanner (local analysis)
+   - Sonar Scanner (local analysis)
   sonar-scanner \
     -Dsonar.projectKey=my_project \
     -Dsonar.sources=. \
     -Dsonar.host.url=http://localhost:9000 \
     -Dsonar.login=<your_token>
   
-  #  Using Docker for scanner
+   - Using Docker for scanner
   docker run --rm \
     -e SONAR_HOST_URL="http://localhost:9000" \
     -e SONAR_LOGIN="<your_token>" \
     -v "$(pwd)":/usr/src \
     sonarsource/sonar-scanner-cli
   
-  #  Password reset and admin
-  # Edit sonar.properties or via Web UI under Administration > Security
+   - Password reset and admin
+   - Edit sonar.properties or via Web UI under Administration > Security
   
 
-OWASP DEPENDENCY-CHECK Commands
+#  OWASP DEPENDENCY-CHECK Commands
 
-  #  Basic scan
+   - Basic scan
   dependency-check --project "MyApp" --scan "C:\path\to\project"
   
-  #  Define report output
+   - Define report output
   dependency-check --project "MyApp" --scan "." --out "C:\reports" --format "HTML"
   
-  #  Update vulnerability database
+   - Update vulnerability database
   dependency-check --updateonly
   
-  #  Skip update (faster scans)
+   - Skip update (faster scans)
   dependency-check --scan "." --noupdate
   
-  #  Use custom data directory
+   - Use custom data directory
   dependency-check --data "C:\dependency-check-data" --scan "."
   
-  #  Generate JSON report (for automation)
+   - Generate JSON report (for automation)
   dependency-check --project "MyApp" --scan "." --format "JSON" --out "C:\reports"
   
-  #  Fail build on high severity
+   - Fail build on high severity
   dependency-check --scan "." --failOnCVSS 7.0
   
-  #  Suppress false positives
+   - Suppress false positives
   dependency-check --scan "." --suppression "C:\path\to\suppressions.xml"
   
-  #  Purge local NVD data
+   - Purge local NVD data
   dependency-check --purge
   
-  #  CI/CD example
+   - CI/CD example
   dependency-check --project "MyApp" \
     --scan "C:\Repos\MyApp" \
     --format "HTML" \
