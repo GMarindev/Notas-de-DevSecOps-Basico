@@ -130,6 +130,18 @@ https://jeremylong.github.io/DependencyCheck/dependency-check-cli/arguments.html
   java -jar jenkins-cli.jar -s http://localhost:8080/ install-plugin <plugin_name>
   java -jar jenkins-cli.jar -s http://localhost:8080/ safe-restart
   java -jar jenkins-cli.jar -s http://localhost:8080/ restart
+
+      To create a Docker image with jenkins:
+
+      Win
+         docker run -d ^
+           --name my-jenkins ^
+           -p 8080:8080 -p 50000:50000 ^
+           -v jenkins_home:/var/jenkins_home ^
+           jenkins/jenkins:lts
+     
+      Linux
+         Replace ^ with \
   
 
 #  SONARQUBE Commands
