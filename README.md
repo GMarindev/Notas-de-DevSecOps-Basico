@@ -194,6 +194,6 @@ https://jeremylong.github.io/DependencyCheck/dependency-check-cli/arguments.html
     --format "HTML" \
     --out "C:\Reports" \
     --data "C:\dependency-check-data" \
-    --failOnCVSS 7 \
+    --failOnCVSS 7.0 \
     --noupdate
 
